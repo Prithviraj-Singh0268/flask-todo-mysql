@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 from dotenv import load_dotenv
+from models import db
 
 load_dotenv()
 
@@ -16,6 +17,11 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
+
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 
 
 @app.route("/")
