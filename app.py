@@ -1,7 +1,7 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
+from models import db, Task
 from dotenv import load_dotenv
-from models import db
 
 load_dotenv()
 
@@ -26,7 +26,8 @@ with app.app_context():
 
 @app.route("/")
 def index():
-    return "Todo App - MySQL connected!"
+    tasks = Task.query.order_by(Task.created_at.desc()).all()
+    return render_template("index.html", tasks=tasks)
 
 
 if __name__ == "__main__":

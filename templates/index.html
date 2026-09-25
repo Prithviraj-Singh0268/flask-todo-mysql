@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}My Tasks{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>My Tasks</h2>
+    <a href="#" class="btn btn-primary">+ Add Task</a>
+</div>
+
+{% if tasks %}
+    {% for task in tasks %}
+        <div class="task-card">
+            <h5 class="task-title">{{ task.title }}</h5>
+            {% if task.description %}
+                <p class="mb-1 text-muted">{{ task.description }}</p>
+            {% endif %}
+            <span class="priority-{{ task.priority }}">{{ task.priority }} priority</span>
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="text-muted">No tasks yet. Add one to get started!</p>
+{% endif %}
+{% endblock %}
