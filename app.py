@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for, flash
 from models import db, Task
 from dotenv import load_dotenv
 
@@ -28,6 +28,25 @@ with app.app_context():
 def index():
     tasks = Task.query.order_by(Task.created_at.desc()).all()
     return render_template("index.html", tasks=tasks)
+
+@app.route("/add", methods=["GET", "POST"])
+def add_task():
+    if request.method == "POST":
+        title = request.form.get("title", "").strip()
+        description = request.form.get("description", "").strip()
+        priority = request.form.get("priority", "Medium")
+
+        if not title:
+            flash("Title is required.", "danger")
+            return redirect(url_for("add_task"))
+
+        task = Task(title=title, description=description, priority=priority)
+        db.session.add(task)
+        db.session.commit()
+        flash("Task added successfully!", "success")
+        return redirect(url_for("index"))
+
+    return render_template("add_task.html")
 
 
 if __name__ == "__main__":
