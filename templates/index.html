@@ -15,9 +15,13 @@
             <p class="mb-1 text-muted">{{ task.description }}</p>
             {% endif %}
             <span class="priority-{{ task.priority }}">{{ task.priority }} priority</span>
-        <div class="mt-2">
-            <a href="{{ url_for('edit_task', task_id=task.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
-        </div>
+            <div class="mt-2">
+                <a href="{{ url_for('edit_task', task_id=task.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                <form method="POST" action="{{ url_for('delete_task', task_id=task.id) }}" class="d-inline"
+                onsubmit="return confirm('Delete this task?');">
+                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            </div>
         </div>
     {% endfor %}
 {% else %}
