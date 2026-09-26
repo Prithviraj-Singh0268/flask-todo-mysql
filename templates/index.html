@@ -10,19 +10,26 @@
 {% if tasks %}
     {% for task in tasks %}
         <div class="task-card">
-            <h5 class="task-title">{{ task.title }}</h5>
+    <div class="d-flex align-items-start">
+        <form method="POST" action="{{ url_for('toggle_complete', task_id=task.id) }}" class="me-2">
+            <input type="checkbox" onchange="this.form.submit()" {% if task.completed %}checked{% endif %}>
+        </form>
+        <div class="flex-grow-1">
+            <h5 class="task-title {% if task.completed %}completed{% endif %}">{{ task.title }}</h5>
             {% if task.description %}
-            <p class="mb-1 text-muted">{{ task.description }}</p>
+                <p class="mb-1 text-muted">{{ task.description }}</p>
             {% endif %}
             <span class="priority-{{ task.priority }}">{{ task.priority }} priority</span>
             <div class="mt-2">
                 <a href="{{ url_for('edit_task', task_id=task.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
                 <form method="POST" action="{{ url_for('delete_task', task_id=task.id) }}" class="d-inline"
-                onsubmit="return confirm('Delete this task?');">
-                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                      onsubmit="return confirm('Delete this task?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                 </form>
             </div>
         </div>
+    </div>
+</div>
     {% endfor %}
 {% else %}
     <p class="text-muted">No tasks yet. Add one to get started!</p>
